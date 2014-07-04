@@ -83,8 +83,8 @@ class SessionPair():
 		try:
 			netsend(msg, CONT_MSG, self._SessionSocket)
 			return (True)
-		except:
-			G_Log.error('send msg error! [CSession.py:sessionsend]')
+		except Exception, e:
+			G_Log.error(str(e) + 'send msg error! [CSession.py:sessionsend]')
 			return (False)
 
 

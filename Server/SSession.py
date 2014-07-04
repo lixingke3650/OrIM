@@ -152,32 +152,36 @@ class SessionManage():
 		for i in range(len(self._SessionPairList)):
 			if (self._SessionPairList[i]._User1._ID == id):
 				if (self._SessionPairList[i]._User2._ID != oid):
-					return
+					continue
 				if (self._SessionPairList[i]._Cert != cert):
-					return
+					continue
 				if (self._SessionPairList[i]._Status == True):
-					return
+					continue
 				self._SessionPairList[i]._Socket1 = sock
 				self._SessionPairList[i]._Flag1 = True
 				if (self._SessionPairList[i]._Flag2 == True):
 					self.sessionconnect(self._SessionPairList[i])
+				else:
+					G_Log.info('session user wait!')
 			elif (self._SessionPairList[i]._User2._ID == id):
 				if (self._SessionPairList[i]._User1._ID != oid):
-					return
+					continue
 				if (self._SessionPairList[i]._Cert != cert):
-					return
+					continue
 				if (self._SessionPairList[i]._Status == True):
-					return
+					continue
 				self._SessionPairList[i]._Socket2 = sock
 				self._SessionPairList[i]._Flag2 = True
 				if (self._SessionPairList[i]._Flag1 == True):
 					self.sessionconnect(self._SessionPairList[i])
+				else:
+					G_Log.info('session user wait!')
 
 
 	def sessionconnect(self, pair):
 		'''会话开始'''
 
-		print('sessionconnect!')
+		print('user session start!')
 		try:
 			csc = CSCService(pair._Socket1, pair._Socket2)
 			pair._Status = True

@@ -62,24 +62,6 @@ class  UserControl():
 			return (False)
 
 
-	def connreq(self, tguser):
-		'''连接请求并等待
-
-		return: True or False
-		请求方处于等待状态，直到有被请求方回应
-		暂未考虑多用户并发请求。后续追加!!'''
-
-		# 连接请求送信
-		self.sendmsg(self._User._ID, CONT_USERREQ, tguser._Socket)
-		# 回信等待
-		msg = self.readmsg(tguser._Socket)
-		if (msg[0] == CONT_USERREQ):
-			if (msg[1] == '1'):
-				return (True)
-
-		return (False)
-
-
 	def handproc(self, cont, data):
 		'''消息分发处理'''
 
@@ -87,7 +69,7 @@ class  UserControl():
 		if (cont == CONT_LOGIN):
 			try:
 				self._User._ID = data
-				# 注意资源竞争，可引入线程所(后续)!!
+				# 注意资源竞争，可引入线程锁(后续)!!
 				self._UserList.append( self._User )
 			except:
 				# 登录失败
@@ -151,9 +133,10 @@ class  UserControl():
 				else:
 					self.sendmsg('0'+';'+self._User._ID, CONT_USERCONN, tguser._Socket)
 
-		# 开始会话请求
+		# 会话
 		elif (cont == CONT_MSG):
-			pass
+			# 不应通过可控制线路发送会话信息
+			G_Log.error('Control recv a session msg! [SControl.py:handproc]')
 
 
 	def start(self):
